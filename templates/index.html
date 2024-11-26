@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coding Challenge Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .topic-box {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f2937;
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .topic-box:hover {
+            transform: scale(1.05);
+        }
+        .topic-box.selected {
+            background-color: #34d399;
+            border-color: #059669;
+            color: white;
+        }
+        .difficulty-btn {
+            transition: all 0.2s ease-in-out;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+        }
+        .difficulty-btn.selected {
+            filter: brightness(0.85);
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-800 to-gray-900 min-h-screen flex flex-col items-center justify-center text-white">
+    <div class="container max-w-5xl bg-gray-100 rounded-lg shadow-lg p-10">
+        <h1 class="text-3xl font-extrabold text-center mb-2 text-gray-800">Welcome to the AURO Coding Challenge Platform</h1>
+        <p class="text-xl text-center text-gray-600 mb-2">Customize your challenge by selecting difficulty, topics, number of questions, and total time.</p>
+
+        <form method="post" action="/" id="challengeForm">
+            <!-- Username Input -->
+            <div class="mb-2 text-center">
+                <label for="username" class="block text-xl font-semibold mb-2 text-gray-800 text-center">Enter your name:</label>
+                <input type="text" id="username" name="username" required class="w-full px-4 py-2 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-black text-center">
+            </div>
+
+            <!-- Difficulty Selection -->
+            <div class="mb-2">
+                <h2 class="text-xl font-semibold mb-2 text-center text-gray-800">Select Difficulty</h2>
+                <div class="flex justify-center gap-6">
+                    <div class="difficulty-btn bg-green-500 text-white" data-difficulty="easy">Easy</div>
+                    <div class="difficulty-btn bg-yellow-500 text-white" data-difficulty="medium">Medium</div>
+                    <div class="difficulty-btn bg-red-500 text-white" data-difficulty="hard">Hard</div>
+                </div>
+                <input type="hidden" name="difficulty" id="difficulty" value="medium">
+            </div>
+
+            <!-- Topic Selection -->
+            <div class="mb-4">
+                <h2 class="text-xl font-semibold mb-2 text-center text-gray-800">Select Topics</h2>
+                <div class="overflow-auto scrollbar-hide border border-gray-300 p-4 rounded-lg bg-gray-50 h-64" id="topicsContainer">
+                    <div class="topic-box" data-topic="Array">Array</div>
+                    <div class="topic-box" data-topic="String">String</div>
+                    <div class="topic-box" data-topic="Hash Table">Hash Table</div>
+                    <div class="topic-box" data-topic="Dynamic Programming">Dynamic Programming</div>
+                    <div class="topic-box" data-topic="Math">Math</div>
+                    <div class="topic-box" data-topic="Sorting">Sorting</div>
+                    <div class="topic-box" data-topic="Greedy">Greedy</div>
+                    <div class="topic-box" data-topic="Depth-First Search">Depth-First Search</div>
+                    <div class="topic-box" data-topic="Database">Database</div>
+                    <div class="topic-box" data-topic="Binary Search">Binary Search</div>
+                    <div class="topic-box" data-topic="Matrix">Matrix</div>
+                    <div class="topic-box" data-topic="Tree">Tree</div>
+                    <div class="topic-box" data-topic="Breadth-First Search">Breadth-First Search</div>
+                    <div class="topic-box" data-topic="Bit Manipulation">Bit Manipulation</div>
+                    <div class="topic-box" data-topic="Two Pointers">Two Pointers</div>
+                    <div class="topic-box" data-topic="Prefix Sum">Prefix Sum</div>
+                    <div class="topic-box" data-topic="Heap (Priority Queue)">Heap (Priority Queue)</div>
+                    <div class="topic-box" data-topic="Binary Tree">Binary Tree</div>
+                    <div class="topic-box" data-topic="Simulation">Simulation</div>
+                    <div class="topic-box" data-topic="Stack">Stack</div>
+                    <div class="topic-box" data-topic="Counting">Counting</div>
+                    <div class="topic-box" data-topic="Graph">Graph</div>
+                    <div class="topic-box" data-topic="Sliding Window">Sliding Window</div>
+                    <div class="topic-box" data-topic="Design">Design</div>
+                    <div class="topic-box" data-topic="Backtracking">Backtracking</div>
+                    <div class="topic-box" data-topic="Enumeration">Enumeration</div>
+                    <div class="topic-box" data-topic="Union Find">Union Find</div>
+                    <div class="topic-box" data-topic="Linked List">Linked List</div>
+                    <div class="topic-box" data-topic="Ordered Set">Ordered Set</div>
+                    <div class="topic-box" data-topic="Number Theory">Number Theory</div>
+                    <div class="topic-box" data-topic="Monotonic Stack">Monotonic Stack</div>
+                    <div class="topic-box" data-topic="Trie">Trie</div>
+                    <div class="topic-box" data-topic="Segment Tree">Segment Tree</div>
+                    <div class="topic-box" data-topic="Bitmask">Bitmask</div>
+                    <div class="topic-box" data-topic="Divide and Conquer">Divide and Conquer</div>
+                    <div class="topic-box" data-topic="Queue">Queue</div>
+                    <div class="topic-box" data-topic="Recursion">Recursion</div>
+                    <div class="topic-box" data-topic="Combinatorics">Combinatorics</div>
+                    <div class="topic-box" data-topic="Binary Search Tree">Binary Search Tree</div>
+                    <div class="topic-box" data-topic="Hash Function">Hash Function</div>
+                    <div class="topic-box" data-topic="Binary Indexed Tree">Binary Indexed Tree</div>
+                    <div class="topic-box" data-topic="Geometry">Geometry</div>
+                    <div class="topic-box" data-topic="Memoization">Memoization</div>
+                    <div class="topic-box" data-topic="String Matching">String Matching</div>
+                    <div class="topic-box" data-topic="Topological Sort">Topological Sort</div>
+                    <div class="topic-box" data-topic="Shortest Path">Shortest Path</div>
+                    <div class="topic-box" data-topic="Rolling Hash">Rolling Hash</div>
+                    <div class="topic-box" data-topic="Game Theory">Game Theory</div>
+                    <div class="topic-box" data-topic="Interactive">Interactive</div>
+                    <div class="topic-box" data-topic="Data Stream">Data Stream</div>
+                    <div class="topic-box" data-topic="Monotonic Queue">Monotonic Queue</div>
+                    <div class="topic-box" data-topic="Brainteaser">Brainteaser</div>
+                    <div class="topic-box" data-topic="Randomized">Randomized</div>
+                    <div class="topic-box" data-topic="Merge Sort">Merge Sort</div>
+                    <div class="topic-box" data-topic="Doubly-Linked List">Doubly-Linked List</div>
+                    <div class="topic-box" data-topic="Counting Sort">Counting Sort</div>
+                    <div class="topic-box" data-topic="Iterator">Iterator</div>
+                    <div class="topic-box" data-topic="Concurrency">Concurrency</div>
+                    <div class="topic-box" data-topic="Probability and Statistics">Probability and Statistics</div>
+                    <div class="topic-box" data-topic="Quickselect">Quickselect</div>
+                    <div class="topic-box" data-topic="Suffix Array">Suffix Array</div>
+                    <div class="topic-box" data-topic="Bucket Sort">Bucket Sort</div>
+                    <div class="topic-box" data-topic="Minimum Spanning Tree">Minimum Spanning Tree</div>
+                    <div class="topic-box" data-topic="Shell">Shell</div>
+                    <div class="topic-box" data-topic="Line Sweep">Line Sweep</div>
+                    <div class="topic-box" data-topic="Reservoir Sampling">Reservoir Sampling</div>
+                    <div class="topic-box" data-topic="Strongly Connected Component">Strongly Connected Component</div>
+                    <div class="topic-box" data-topic="Eulerian Circuit">Eulerian Circuit</div>
+                    <div class="topic-box" data-topic="Radix Sort">Radix Sort</div>
+                    <div class="topic-box" data-topic="Rejection Sampling">Rejection Sampling</div>
+                    <!-- Add more topics as needed -->
+                </div>
+                <input type="hidden" name="topics" id="topics" value="">
+            </div>
+
+            <!-- Number of Questions -->
+            <div class="mb-2">
+                <h2 class="text-xl font-semibold mb-2 text-center text-gray-800">Number of Questions</h2>
+                <div class="flex items-center justify-center gap-4">
+                    <input type="range" id="questionCount" name="questionCount" min="1" max="20" value="3" class="slider w-3/4">
+                    <span id="questionCountLabel" class="text-2xl font-bold text-gray-800">3</span>
+                </div>
+            </div>
+
+            <!-- Time Duration -->
+            <div class="mb-2">
+                <h2 class="text-xl font-semibold mb-2 text-center text-gray-800">Total Time (in minutes)</h2>
+                <div class="flex items-center justify-center gap-4">
+                    <input type="range" id="timeDuration" name="timeDuration" min="20" max="180" value="60" step="10" class="slider w-3/4">
+                    <span id="timeDurationLabel" class="text-2xl font-bold text-gray-800">60</span>
+                </div>
+            </div>
+
+            <!-- Start Challenge Button -->
+            <div class="text-center">
+                <button type="submit" id="startChallenge" class="px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md">
+                    Start Challenge
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let selectedDifficulty = "medium";
+        const selectedTopics = new Set();
+
+        // Handle difficulty selection
+        document.querySelectorAll('.difficulty-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                selectedDifficulty = button.getAttribute('data-difficulty');
+                document.getElementById('difficulty').value = selectedDifficulty;
+            });
+        });
+
+        // Handle topic selection
+        const topicsContainer = document.getElementById('topicsContainer');
+        const topicsInput = document.getElementById('topics');
+
+        topicsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('topic-box')) {
+                const topic = e.target.getAttribute('data-topic');
+                if (selectedTopics.has(topic)) {
+                    selectedTopics.delete(topic);
+                    e.target.classList.remove('selected');
+                } else {
+                    selectedTopics.add(topic);
+                    e.target.classList.add('selected');
+                }
+                topicsInput.value = Array.from(selectedTopics).join(',');
+            }
+        });
+
+        // Handle number of questions slider
+        const questionCount = document.getElementById('questionCount');
+        const questionCountLabel = document.getElementById('questionCountLabel');
+        questionCount.addEventListener('input', () => {
+            questionCountLabel.textContent = questionCount.value;
+        });
+
+        // Handle time duration slider
+        const timeDuration = document.getElementById('timeDuration');
+        const timeDurationLabel = document.getElementById('timeDurationLabel');
+        timeDuration.addEventListener('input', () => {
+            timeDurationLabel.textContent = timeDuration.value;
+        });
+    </script>
+</body>
+</html>

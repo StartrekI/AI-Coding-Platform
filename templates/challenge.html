@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Challenge {{ question_number }}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Grid layout with resizable columns */
+        .resizable-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .resizable-bar {
+            cursor: col-resize;
+            background-color: #333;
+            width: 5px;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .resizable-bar:hover {
+            background-color: #555;
+        }
+
+        .left-pane {
+            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .left-pane h2 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .question {
+            background-color: #ffffff;
+            border: 2px solid #1e40af;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-pane {
+            background-color: #1e1e1e;
+            color: white;
+            padding: 20px;
+            overflow-y: auto; /* Enable vertical scrollbar */
+        }
+
+        .right-pane h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .question h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .question p {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .highlight-box {
+            background-color: #f1f5f9;
+            border: 1px solid #1e40af;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="resizable-container">
+        <!-- Left Pane: Problem Description -->
+        <div class="left-pane w-1/2">
+            <h2>Question {{ question_number }}</h2>
+            <div class="question">
+                {% for line in question.split('\n') %}
+                    <p>{{ line | safe }}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Resizable Bar -->
+        <div class="resizable-bar"></div>
+
+        <!-- Right Pane: Code Editor -->
+        <div class="right-pane flex-1">
+            <div id="timer" class="text-right text-gray-300 font-medium mb-4">
+                Time Remaining: <span id="time" class="text-red-500 font-semibold">00:00:00</span>
+            </div>
+            <form method="post" class="space-y-4">
+                <!-- Controls Row: Language, Font Size, Theme -->
+                <div class="flex space-x-4 items-center">
+                    <!-- Language Selection -->
+                    <div>
+                        <label for="language" class="block text-gray-300 font-medium mb-1">Language</label>
+                        <select name="language" id="language" required class="px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-white">
+                            <option value="" disabled selected>Select</option>
+                            <option value="python">Python</option>
+                            <option value="cpp">C++</option>
+                            <option value="java">Java</option>
+                            <option value="c">C</option>
+                        </select>
+                    </div>
+
+                    <!-- Font Size Selection -->
+                    <div>
+                        <label for="font-size" class="block text-gray-300 font-medium mb-1">Font Size</label>
+                        <select id="font-size" class="px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-white">
+                            <option value="12px">12px</option>
+                            <option value="14px" selected>14px</option>
+                            <option value="16px" >16px</option>
+                            <option value="18px">18px</option>
+                            <option value="20px">20px</option>
+                        </select>
+                    </div>
+
+                    <!-- Theme Selection -->
+                    <div>
+                        <label for="theme" class="block text-gray-300 font-medium mb-1">Theme</label>
+                        <select id="theme" class="px-4 py-2 border border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-white">
+                            <option value="monokai" selected>Monokai</option>
+                            <option value="github">GitHub</option>
+                            <option value="dracula">Dracula</option>
+                            <option value="tomorrow">Tomorrow</option>
+                            <option value="solarized_light">Solarized Light</option>
+                            <option value="solarized_dark">Solarized Dark</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Editor -->
+                <div id="editor" class="rounded-md shadow-md" style="height: calc(100vh - 300px); border: 2px solid #808080;"></div>
+                <textarea name="code" id="code" style="display:none;"></textarea>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md shadow-md">
+                    Submit Code
+                </button>
+                {% if error %}
+                    <div class="text-red-500 text-sm mt-2">{{ error }}</div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Ace Editor
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        // Font Size Change
+        const fontSizeSelect = document.getElementById("font-size");
+        fontSizeSelect.addEventListener("change", () => {
+            editor.setFontSize(fontSizeSelect.value);
+        });
+
+        // Theme Change
+        const themeSelect = document.getElementById("theme");
+        themeSelect.addEventListener("change", () => {
+            editor.setTheme("ace/theme/" + themeSelect.value);
+        });
+
+        // Language selection handling
+        const languageSelect = document.getElementById('language');
+        languageSelect.addEventListener('change', function() {
+            const language = languageSelect.value;
+            const mode = "ace/mode/" + (language === 'cpp' ? 'c_cpp' : language);
+            editor.session.setMode(mode);
+        });
+
+        // Form submission handling
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function() {
+            document.getElementById('code').value = editor.getValue();
+        });
+
+        // Timer countdown logic
+        var timeInSeconds = {{ remaining_time }};
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimer() {
+            if (timeInSeconds <= 0) {
+                alert('Time is up!');
+                window.location.href = "{{ url_for('result') }}";
+            } else {
+                timeInSeconds--;
+                document.getElementById('time').textContent = formatTime(timeInSeconds);
+            }
+        }
+
+        document.getElementById('time').textContent = formatTime(timeInSeconds);
+        setInterval(updateTimer, 1000);
+
+        // Resizable logic
+        const resizableBar = document.querySelector('.resizable-bar');
+        const leftPane = document.querySelector('.left-pane');
+        const rightPane = document.querySelector('.right-pane');
+
+        let isResizing = false;
+
+        resizableBar.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const containerRect = document.querySelector('.resizable-container').getBoundingClientRect();
+            const newLeftWidth = e.clientX - containerRect.left;
+
+            if (newLeftWidth < 200 || newLeftWidth > containerRect.width - 200) return;
+
+            leftPane.style.width = `${newLeftWidth}px`;
+            rightPane.style.width = `calc(100% - ${newLeftWidth + 5}px)`; // Adjust for resizable bar width
+        });
+
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+            document.body.style.cursor = 'default';
+        });
+    </script>
+</body>
+</html>

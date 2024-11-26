@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .feedback-box {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            color: #1f2937;
+            white-space: pre-wrap;
+            font-size: 1rem; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .error-box {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .output-box {
+            background-color: #000000; /* Black background */
+            border: 1px solid #444444; /* Slightly lighter border for subtle contrast */
+            color: #ffffff; /* White text */
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 2.2rem; /* Increased font size */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-100 to-blue-100 min-h-screen flex items-center justify-center">
+    <div class="container max-w-4xl bg-white shadow-lg rounded-lg p-8 space-y-6">
+        {% set evaluation = "Correct" if "Evaluation: Correct" in ai_feedback else "Incorrect" %}
+        {% if evaluation == "Correct" %}
+            <h2 class="text-3xl font-bold text-green-600 text-center">{{ evaluation }}!</h2>
+        {% else %}
+            <h2 class="text-3xl font-bold text-red-600 text-center">{{ evaluation }}.</h2>
+        {% endif %}
+
+        {% if output %}
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800">Program Output:</h3>
+                <div class="output-box">{{ output }}</div>
+            </div>
+        {% endif %}
+
+        {% if ai_feedback %}
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800">AI Feedback:</h3>
+                <div class="feedback-box">
+                    {{ ai_feedback }}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="text-center mt-6">
+            <a href="{{ url_for('challenge') }}"
+               class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md shadow-md">
+                Next Question
+            </a>
+        </div>
+    </div>
+</body>
+</html>
