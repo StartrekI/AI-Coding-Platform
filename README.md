@@ -48,18 +48,30 @@ Welcome to the AI-Powered Coding Platform, an innovative solution designed to en
  Home Page:
 - Select difficulty, topics, and number of questions.
 - Customize the time limit for your coding session.
+  
+   ![main](./webiste_images/main.png)
 
  Coding Challenge Interface:
 - Split-pane view for problem description and code editor.
 - Resizable panes with syntax highlighting and multiple language support.
 
+   ![interface](./webiste_images/interface.png)
+
  Feedback Page:
 - AI-generated feedback on submitted solutions.
 - High-contrast result boxes for enhanced readability.
 
+  ![help](./webiste_images/help.png)
+
+  
+  ![review ](./webiste_images/review .png)
+   
+
  Leaderboard:
 - See your performance compared to other participants.
 - Scores displayed up to two decimal points.
+
+   ![leaderboard](./webiste_images/leaderboard.png)
 
 ---
 
