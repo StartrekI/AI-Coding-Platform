@@ -64,7 +64,7 @@ Welcome to the AI-Powered Coding Platform, an innovative solution designed to en
   ![help](./webiste_images/help.png)
 
   
-  ![review ](./webiste_images/review .png)
+  ![review](./webiste_images/review.png)
    
 
  Leaderboard:
