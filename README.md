@@ -1,5 +1,5 @@
 # AI-Powered Coding Platform
-**Site is live**  [AI Coding Platform](https://verseanime.netlify.app/)
+**Site is live**  [AI Coding Platform]([https://verseanime.netlify.app/](https://ai-coding-platform.onrender.com))
 
 ### Welcome to the AI-Powered Coding Platform, an innovative solution designed to enhance coding skills and problem-solving abilities. This platform combines the power of AI and real-time code evaluation to provide an engaging and educational experience for users.
 
